@@ -25,7 +25,7 @@ public class AiAnalysisService
         var endpoint = GetChatEndpoint(settings);
         var options = new RestClientOptions(endpoint)
         {
-            MaxTimeout = 180_000 // 3 minutes for long analyses
+            Timeout = TimeSpan.FromMinutes(3) // 3 minutes for long analyses
         };
 
         using var client = new RestClient(options);

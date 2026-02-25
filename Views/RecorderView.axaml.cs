@@ -24,9 +24,9 @@ public partial class RecorderView : UserControl
 
     private void OnDrop(object? sender, DragEventArgs e)
     {
-        if (e.Data.Contains(DataFormats.Files))
+        if (e.DataTransfer.Contains(DataFormat.File))
         {
-            var files = e.Data.GetFiles();
+            var files = e.DataTransfer.TryGetFiles();
             if (files != null)
             {
                 var file = files.FirstOrDefault();

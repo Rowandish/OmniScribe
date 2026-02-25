@@ -53,7 +53,7 @@ public class TranscriptionService
     {
         var options = new RestClientOptions(endpoint)
         {
-            MaxTimeout = 120_000 // 2 minutes
+            Timeout = TimeSpan.FromMinutes(2) // 2 minutes
         };
 
         using var client = new RestClient(options);

@@ -48,7 +48,6 @@
                     ClipToBounds="True"
                     IsVisible="{Binding IsRecording}">
                 <Border HorizontalAlignment="Left"
-                        Background="LinearGradientBrush"
                         CornerRadius="3">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">

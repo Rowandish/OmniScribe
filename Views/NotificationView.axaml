@@ -1,7 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:models="using:OmniScribe.Models"
-             x:Class="OmniScribe.Views.NotificationView">
+             x:Class="OmniScribe.Views.NotificationView"
+             x:CompileBindings="False">
 
     <ItemsControl ItemsSource="{Binding}"
                   HorizontalAlignment="Right"

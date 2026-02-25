@@ -74,8 +74,9 @@
                 <Panel Grid.Row="1" Margin="24,0">
 
                     <!-- Settings Panel (overlay) -->
-                    <views:SettingsView DataContext="{Binding Settings}"
-                                        IsVisible="{Binding IsSettingsOpen}" />
+                    <Panel IsVisible="{Binding IsSettingsOpen}">
+                        <views:SettingsView DataContext="{Binding Settings}" />
+                    </Panel>
 
                     <!-- Results Panel -->
                     <Grid RowDefinitions="*" IsVisible="{Binding !IsSettingsOpen}">
