@@ -1,0 +1,166 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:OmniScribe"
+             xmlns:conv="using:OmniScribe.Converters"
+             x:Class="OmniScribe.App"
+             RequestedThemeVariant="Dark">
+
+    <Application.Resources>
+        <conv:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+        <conv:LevelToWidthConverter x:Key="LevelToWidthConverter" />
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </Application.Resources>
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!--          OMNISCRIBE DARK GLASSMORPHISM          -->
+        <!-- ═══════════════════════════════════════════════ -->
+
+        <!-- ── Glass Panel ── -->
+        <Style Selector="Border.glass-panel">
+            <Setter Property="Background" Value="#CC111827" />
+            <Setter Property="BorderBrush" Value="#1E293B" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="14" />
+        </Style>
+
+        <!-- ── REC Button ── -->
+        <Style Selector="Button.rec-button">
+            <Setter Property="Background" Value="#1C1C2E" />
+            <Setter Property="BorderBrush" Value="#2D2D44" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Foreground" Value="#FF4444" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.rec-button:pointerover">
+            <Setter Property="Background" Value="#2A1A1A" />
+            <Setter Property="BorderBrush" Value="#FF4444" />
+        </Style>
+        <Style Selector="Button.rec-button:pressed">
+            <Setter Property="Background" Value="#331A1A" />
+        </Style>
+
+        <!-- ── Accent Button (Save, primary actions) ── -->
+        <Style Selector="Button.accent-button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+                        <GradientStop Color="#6C3AED" Offset="0" />
+                        <GradientStop Color="#7A5CFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.accent-button:pointerover">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+                        <GradientStop Color="#7C4DFF" Offset="0" />
+                        <GradientStop Color="#8B6CFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ── Sidebar Button ── -->
+        <Style Selector="Button.sidebar-button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#94A3B8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.sidebar-button:pointerover">
+            <Setter Property="Background" Value="#1A1F2E" />
+            <Setter Property="Foreground" Value="#CBD5E1" />
+        </Style>
+
+        <!-- ── Icon Button (small actions) ── -->
+        <Style Selector="Button.icon-button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#64748B" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.icon-button:pointerover">
+            <Setter Property="Background" Value="#1E293B" />
+            <Setter Property="Foreground" Value="#CBD5E1" />
+        </Style>
+
+        <!-- ── Settings Input (TextBox) ── -->
+        <Style Selector="TextBox.settings-input">
+            <Setter Property="Background" Value="#0D1117" />
+            <Setter Property="Foreground" Value="#CBD5E1" />
+            <Setter Property="BorderBrush" Value="#1E293B" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+        <Style Selector="TextBox.settings-input:focus">
+            <Setter Property="BorderBrush" Value="#7A5CFF" />
+        </Style>
+
+        <!-- ── Result TextBox (read-only) ── -->
+        <Style Selector="TextBox.result-textbox">
+            <Setter Property="Background" Value="#080B11" />
+            <Setter Property="Foreground" Value="#CBD5E1" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="12" />
+        </Style>
+
+        <!-- ── Global ComboBox ── -->
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#0D1117" />
+            <Setter Property="Foreground" Value="#CBD5E1" />
+            <Setter Property="BorderBrush" Value="#1E293B" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+
+        <!-- ── Global ListBox ── -->
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <!-- ── ProgressBar ── -->
+        <Style Selector="ProgressBar">
+            <Setter Property="CornerRadius" Value="2" />
+        </Style>
+
+        <!-- ── ScrollViewer ── -->
+        <Style Selector="ScrollViewer">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+    </Application.Styles>
+</Application>

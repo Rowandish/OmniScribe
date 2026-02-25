@@ -1,0 +1,116 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OmniScribe.ViewModels"
+             x:Class="OmniScribe.Views.RecorderView"
+             x:DataType="vm:RecorderViewModel">
+
+    <Border Classes="glass-panel" Padding="24" Margin="0,0,0,16">
+        <Grid RowDefinitions="Auto,Auto,*">
+
+            <!-- Recording Controls Row -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center">
+
+                <!-- REC Button -->
+                <Button Classes="rec-button"
+                        Command="{Binding ToggleRecordingCommand}"
+                        Width="64" Height="64"
+                        CornerRadius="32"
+                        ToolTip.Tip="Registra / Ferma">
+                    <Panel>
+                        <!-- Circle when not recording -->
+                        <Ellipse Width="24" Height="24"
+                                 Fill="#FF4444"
+                                 IsVisible="{Binding !IsRecording}" />
+                        <!-- Square when recording -->
+                        <Border Width="20" Height="20"
+                                Background="#FF4444"
+                                CornerRadius="3"
+                                IsVisible="{Binding IsRecording}" />
+                    </Panel>
+                </Button>
+
+                <!-- Duration -->
+                <TextBlock Text="{Binding RecordingDuration}"
+                           FontSize="28"
+                           FontWeight="Light"
+                           FontFamily="Inter, Segoe UI"
+                           VerticalAlignment="Center"
+                           Foreground="#B0BEC5"
+                           Opacity="{Binding IsRecording, Converter={StaticResource BoolToOpacityConverter}}" />
+            </StackPanel>
+
+            <!-- Level Meter -->
+            <Border Grid.Row="1"
+                    Margin="0,16,0,0"
+                    Height="6"
+                    CornerRadius="3"
+                    Background="#1A1A2E"
+                    ClipToBounds="True"
+                    IsVisible="{Binding IsRecording}">
+                <Border HorizontalAlignment="Left"
+                        Background="LinearGradientBrush"
+                        CornerRadius="3">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+                            <GradientStop Color="#00D2FF" Offset="0" />
+                            <GradientStop Color="#7A5CFF" Offset="0.5" />
+                            <GradientStop Color="#FF4444" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Width>
+                        <MultiBinding Converter="{StaticResource LevelToWidthConverter}">
+                            <Binding Path="AudioLevel" />
+                            <Binding Path="$parent[Border].Bounds.Width" />
+                        </MultiBinding>
+                    </Border.Width>
+                </Border>
+            </Border>
+
+            <!-- Drag & Drop Zone -->
+            <Border Grid.Row="2"
+                    Margin="0,20,0,0"
+                    MinHeight="100"
+                    CornerRadius="12"
+                    BorderThickness="2"
+                    BorderBrush="#334155"
+                    Background="#0D1117"
+                    Padding="24"
+                    DragDrop.AllowDrop="True"
+                    IsVisible="{Binding !IsRecording}">
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="8">
+                    <!-- Upload Icon SVG Path -->
+                    <PathIcon Width="36" Height="36"
+                              Foreground="#4A5568"
+                              Data="M11 20H6.5Q4.225 20 2.613 18.4Q1 16.8 1 14.5Q1 12.6 2.175 11.113Q3.35 9.625 5.15 9.175Q5.6 7.1 7.213 5.8Q8.825 4.5 11 4.5Q12.6 4.5 13.913 5.2Q15.225 5.9 16.1 7.1L16.5 7.6L16.9 7.1Q17.775 5.9 19.088 5.2Q20.4 4.5 22 4.5Q24.925 4.5 26.963 6.538Q29 8.575 29 11.5Q29 11.95 28.95 12.375Q28.9 12.8 28.8 13.2Q30.25 13.875 31.125 15.225Q32 16.575 32 18.175Q32 20.275 30.488 21.638Q28.975 23 26.825 23H22V14.8L24.6 17.4L26 16L21 11L16 16L17.4 17.4L20 14.8V23H13V14.8L15.6 17.4L17 16L12 11L7 16L8.4 17.4L11 14.8Z" />
+                    <TextBlock Text="Trascina qui i file audio"
+                               Foreground="#4A5568"
+                               FontSize="14"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text=".mp3  .wav  .m4a  .ogg  .flac"
+                               Foreground="#334155"
+                               FontSize="11"
+                               HorizontalAlignment="Center" />
+
+                    <!-- Imported file info -->
+                    <Border IsVisible="{Binding HasImportedFile}"
+                            Background="#1C2333"
+                            CornerRadius="8"
+                            Padding="12,8"
+                            Margin="0,8,0,0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Width="16" Height="16"
+                                      Foreground="#00D2FF"
+                                      Data="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2M18 20H6V4H13V9H18V20Z" />
+                            <TextBlock Text="{Binding ImportedFileName}"
+                                       Foreground="#00D2FF"
+                                       FontSize="13"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

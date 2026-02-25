@@ -1,0 +1,147 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OmniScribe.ViewModels"
+             x:Class="OmniScribe.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="20" Margin="24">
+
+            <!-- Header -->
+            <TextBlock Text="⚙️ Impostazioni"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="#E2E8F0" />
+
+            <!-- API Configuration Section -->
+            <Border Classes="glass-panel" Padding="20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Configurazione API"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#94A3B8" />
+
+                    <!-- Provider -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Provider" FontSize="12" Foreground="#64748B" />
+                        <ComboBox ItemsSource="{Binding AvailableProviders}"
+                                  SelectedItem="{Binding Provider}"
+                                  HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <!-- API Key -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="API Key" FontSize="12" Foreground="#64748B" />
+                        <TextBox Text="{Binding ApiKey}"
+                                 PasswordChar="•"
+                                 Watermark="sk-..."
+                                 Classes="settings-input" />
+                    </StackPanel>
+
+                    <!-- Custom Endpoint -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Custom Endpoint (opzionale)" FontSize="12" Foreground="#64748B" />
+                        <TextBox Text="{Binding CustomEndpoint}"
+                                 Watermark="https://api.example.com/v1"
+                                 Classes="settings-input" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Model Selection Section -->
+            <Border Classes="glass-panel" Padding="20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Modelli"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#94A3B8" />
+
+                    <!-- Transcription Model -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Modello Trascrizione" FontSize="12" Foreground="#64748B" />
+                        <ComboBox ItemsSource="{Binding TranscriptionModels}"
+                                  SelectedItem="{Binding TranscriptionModel}"
+                                  HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <!-- Analysis Model -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Modello Analisi" FontSize="12" Foreground="#64748B" />
+                        <ComboBox ItemsSource="{Binding AnalysisModels}"
+                                  SelectedItem="{Binding AnalysisModel}"
+                                  HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- System Prompt Section -->
+            <Border Classes="glass-panel" Padding="20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="System Prompt"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#94A3B8" />
+                    <TextBox Text="{Binding SystemPrompt}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             MinHeight="120"
+                             MaxHeight="250"
+                             Classes="settings-input"
+                             Watermark="Definisci le istruzioni per l'IA..." />
+                </StackPanel>
+            </Border>
+
+            <!-- Glossary Section -->
+            <Border Classes="glass-panel" Padding="20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Glossario / Contesto"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#94A3B8" />
+                    <TextBlock Text="Inserisci nomi di progetti, acronimi o termini tecnici"
+                               FontSize="11" Foreground="#475569" />
+                    <TextBox Text="{Binding Glossary}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             MinHeight="80"
+                             MaxHeight="150"
+                             Classes="settings-input"
+                             Watermark="Es: ACME Corp, Progetto Phoenix, KPI..." />
+                </StackPanel>
+            </Border>
+
+            <!-- Token & Cost Counter -->
+            <Border Classes="glass-panel" Padding="20">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Consumo Sessione"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#94A3B8" />
+                    <Grid ColumnDefinitions="*,*">
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="Token utilizzati" FontSize="11" Foreground="#64748B" />
+                            <TextBlock Text="{Binding TotalTokensUsed, StringFormat='{}{0:N0}'}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#00D2FF" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Text="Costo stimato" FontSize="11" Foreground="#64748B" />
+                            <TextBlock Text="{Binding EstimatedCost, StringFormat='${0:F4}'}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#7A5CFF" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Save Button -->
+            <Button Content="💾  Salva Impostazioni"
+                    Command="{Binding SaveCommand}"
+                    Classes="accent-button"
+                    HorizontalAlignment="Stretch"
+                    Height="44" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

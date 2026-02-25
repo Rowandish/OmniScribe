@@ -1,0 +1,202 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:OmniScribe.ViewModels"
+        xmlns:views="using:OmniScribe.Views"
+        xmlns:md="clr-namespace:Markdown.Avalonia;assembly=Markdown.Avalonia"
+        x:Class="OmniScribe.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="OmniScribe"
+        Width="1200" Height="780"
+        MinWidth="900" MinHeight="600"
+        Background="#0B0E14"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        WindowStartupLocation="CenterScreen">
+
+    <Panel>
+        <Grid ColumnDefinitions="260,*">
+
+            <!-- ═══════════════ LEFT SIDEBAR ═══════════════ -->
+            <Border Grid.Column="0"
+                    Background="#0F1219"
+                    BorderThickness="0,0,1,0"
+                    BorderBrush="#1E2533">
+                <DockPanel>
+                    <!-- App Logo / Title -->
+                    <Border DockPanel.Dock="Top" Padding="20,28,20,16">
+                        <StackPanel Spacing="4">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock Text="✦"
+                                           FontSize="22"
+                                           Foreground="#7A5CFF" />
+                                <TextBlock Text="OmniScribe"
+                                           FontSize="22"
+                                           FontWeight="Bold"
+                                           Foreground="#E2E8F0" />
+                            </StackPanel>
+                            <TextBlock Text="Audio → Intelligence"
+                                       FontSize="11"
+                                       Foreground="#475569"
+                                       Margin="32,0,0,0" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Bottom Buttons -->
+                    <StackPanel DockPanel.Dock="Bottom" Margin="16,0,16,16" Spacing="6">
+                        <Button Content="⚙️  Impostazioni"
+                                Command="{Binding ToggleSettingsCommand}"
+                                Classes="sidebar-button"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Height="38" />
+                        <Button Content="📤  Esporta MD"
+                                Command="{Binding ExportResultCommand}"
+                                Classes="sidebar-button"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Height="38" />
+                    </StackPanel>
+
+                    <!-- History Panel -->
+                    <views:HistoryView DataContext="{Binding History}" />
+                </DockPanel>
+            </Border>
+
+            <!-- ═══════════════ MAIN CONTENT AREA ═══════════════ -->
+            <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto">
+
+                <!-- ── TOP: Recorder Controls ── -->
+                <Border Grid.Row="0" Padding="24,20,24,0">
+                    <views:RecorderView DataContext="{Binding Recorder}" />
+                </Border>
+
+                <!-- ── CENTER: Content (Settings or Result) ── -->
+                <Panel Grid.Row="1" Margin="24,0">
+
+                    <!-- Settings Panel (overlay) -->
+                    <views:SettingsView DataContext="{Binding Settings}"
+                                        IsVisible="{Binding IsSettingsOpen}" />
+
+                    <!-- Results Panel -->
+                    <Grid RowDefinitions="*" IsVisible="{Binding !IsSettingsOpen}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Spacing="16" Margin="0,8,0,16">
+
+                                <!-- Transcription Section -->
+                                <Border Classes="glass-panel"
+                                        Padding="20"
+                                        IsVisible="{Binding ShowTranscription}">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="📝 Trascrizione"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#94A3B8" />
+                                        <TextBox Text="{Binding TranscriptionText}"
+                                                 IsReadOnly="True"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 MaxHeight="200"
+                                                 Classes="result-textbox"
+                                                 FontSize="13"
+                                                 Foreground="#CBD5E1" />
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- AI Analysis Result (Markdown) -->
+                                <Border Classes="glass-panel"
+                                        Padding="20"
+                                        IsVisible="{Binding ShowResult}">
+                                    <StackPanel Spacing="10">
+                                        <DockPanel>
+                                            <TextBlock Text="🤖 Analisi AI"
+                                                       FontSize="15"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#94A3B8" />
+                                            <Button Content="📋 Copia"
+                                                    Command="{Binding CopyResultCommand}"
+                                                    HorizontalAlignment="Right"
+                                                    Classes="icon-button"
+                                                    FontSize="11"
+                                                    Height="28" />
+                                        </DockPanel>
+                                        <md:MarkdownScrollViewer Markdown="{Binding ResultMarkdown}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Empty State -->
+                                <StackPanel HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Spacing="12"
+                                            Margin="0,60,0,0"
+                                            IsVisible="{Binding !ShowResult}">
+                                    <TextBlock Text="✦"
+                                               FontSize="48"
+                                               HorizontalAlignment="Center"
+                                               Foreground="#1E2533" />
+                                    <TextBlock Text="Registra o importa un file audio per iniziare"
+                                               FontSize="14"
+                                               HorizontalAlignment="Center"
+                                               Foreground="#334155" />
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Panel>
+
+                <!-- ── BOTTOM: Status Bar ── -->
+                <Border Grid.Row="2"
+                        Padding="24,12"
+                        Background="#080B11"
+                        BorderThickness="0,1,0,0"
+                        BorderBrush="#1E2533">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+                            <!-- Status indicator dot -->
+                            <Ellipse Width="8" Height="8"
+                                     VerticalAlignment="Center">
+                                <Ellipse.Fill>
+                                    <SolidColorBrush Color="#22C55E" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <TextBlock Text="{Binding StatusText}"
+                                       FontSize="12"
+                                       Foreground="#94A3B8"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <!-- Progress Bar -->
+                        <ProgressBar Grid.Column="1"
+                                     Value="{Binding ProgressValue}"
+                                     IsIndeterminate="{Binding IsProgressIndeterminate}"
+                                     IsVisible="{Binding IsProcessing}"
+                                     Width="200"
+                                     Height="4"
+                                     Minimum="0"
+                                     Maximum="100"
+                                     VerticalAlignment="Center"
+                                     Foreground="#7A5CFF"
+                                     Background="#1A1A2E" />
+
+                        <!-- Cancel Button -->
+                        <Button Grid.Column="1"
+                                Content="✕"
+                                Command="{Binding CancelProcessingCommand}"
+                                IsVisible="{Binding IsProcessing}"
+                                Classes="icon-button"
+                                ToolTip.Tip="Annulla"
+                                Margin="8,0,0,0"
+                                Width="24" Height="24"
+                                FontSize="11" />
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- ═══════════════ NOTIFICATION OVERLAY ═══════════════ -->
+        <views:NotificationView DataContext="{Binding Notifications}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Margin="0,40,0,0"
+                                IsHitTestVisible="False" />
+    </Panel>
+</Window>
