@@ -10,6 +10,9 @@ namespace OmniScribe.ViewModels;
 
 public partial class HistoryViewModel : ViewModelBase
 {
+    private readonly ISettingsService _settingsService;
+    private readonly INotificationService _notificationService;
+
     [ObservableProperty]
     private SessionRecord? _selectedSession;
 
@@ -21,13 +24,20 @@ public partial class HistoryViewModel : ViewModelBase
     public event Action<SessionRecord>? SessionSelected;
 
     public HistoryViewModel()
+        : this(SettingsService.Instance, NotificationService.Instance)
     {
+    }
+
+    public HistoryViewModel(ISettingsService settingsService, INotificationService notificationService)
+    {
+        _settingsService = settingsService;
+        _notificationService = notificationService;
         LoadHistory();
     }
 
     private void LoadHistory()
     {
-        var records = SettingsService.Instance.LoadHistory();
+        var records = _settingsService.LoadHistory();
         Sessions.Clear();
         foreach (var r in records.OrderByDescending(r => r.Timestamp))
             Sessions.Add(r);
@@ -41,7 +51,7 @@ public partial class HistoryViewModel : ViewModelBase
 
     private void SaveHistory()
     {
-        SettingsService.Instance.SaveHistory(Sessions.ToList());
+        _settingsService.SaveHistory(Sessions.ToList());
     }
 
     [RelayCommand]
@@ -59,6 +69,6 @@ public partial class HistoryViewModel : ViewModelBase
     {
         Sessions.Clear();
         SaveHistory();
-        NotificationService.Instance.Info("Cronologia cancellata.");
+        _notificationService.Info("Cronologia cancellata.");
     }
 }

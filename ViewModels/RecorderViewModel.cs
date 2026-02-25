@@ -10,7 +10,8 @@ namespace OmniScribe.ViewModels;
 
 public partial class RecorderViewModel : ViewModelBase
 {
-    private readonly AudioService _audioService = new();
+    private readonly IAudioService _audioService;
+    private readonly INotificationService _notificationService;
 
     [ObservableProperty]
     private bool _isRecording;
@@ -41,7 +42,15 @@ public partial class RecorderViewModel : ViewModelBase
     public event Action<string>? AudioReady;
 
     public RecorderViewModel()
+        : this(new AudioService(), NotificationService.Instance)
     {
+    }
+
+    public RecorderViewModel(IAudioService audioService, INotificationService notificationService)
+    {
+        _audioService = audioService;
+        _notificationService = notificationService;
+
         _audioService.AudioLevelChanged += level =>
         {
             Dispatcher.UIThread.Post(() => AudioLevel = level);
@@ -72,11 +81,11 @@ public partial class RecorderViewModel : ViewModelBase
             HasImportedFile = false;
             ImportedFileName = string.Empty;
             ImportedFilePath = null;
-            NotificationService.Instance.Info("Registrazione in corso...");
+            _notificationService.Info("Registrazione in corso...");
         }
         catch (Exception ex)
         {
-            NotificationService.Instance.Error($"Errore avvio registrazione: {ex.Message}");
+            _notificationService.Error($"Errore avvio registrazione: {ex.Message}");
         }
     }
 
@@ -87,12 +96,12 @@ public partial class RecorderViewModel : ViewModelBase
             var path = _audioService.StopRecording();
             IsRecording = false;
             AudioLevel = 0;
-            NotificationService.Instance.Success("Registrazione completata.");
+            _notificationService.Success("Registrazione completata.");
             AudioReady?.Invoke(path);
         }
         catch (Exception ex)
         {
-            NotificationService.Instance.Error($"Errore stop registrazione: {ex.Message}");
+            _notificationService.Error($"Errore stop registrazione: {ex.Message}");
         }
     }
 
@@ -107,14 +116,14 @@ public partial class RecorderViewModel : ViewModelBase
     {
         if (!AudioService.IsSupportedFormat(filePath))
         {
-            NotificationService.Instance.Warning("Formato non supportato. Usa: .wav, .mp3, .m4a, .ogg, .flac");
+            _notificationService.Warning("Formato non supportato. Usa: .wav, .mp3, .m4a, .ogg, .flac");
             return;
         }
 
         ImportedFilePath = filePath;
         ImportedFileName = System.IO.Path.GetFileName(filePath);
         HasImportedFile = true;
-        NotificationService.Instance.Info($"File importato: {ImportedFileName}");
+        _notificationService.Info($"File importato: {ImportedFileName}");
         AudioReady?.Invoke(filePath);
     }
 }

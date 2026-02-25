@@ -7,7 +7,7 @@ using OmniScribe.Models;
 
 namespace OmniScribe.Services;
 
-public class SettingsService
+public class SettingsService : ISettingsService
 {
     private static readonly Lazy<SettingsService> _instance = new(() => new SettingsService());
     public static SettingsService Instance => _instance.Value;

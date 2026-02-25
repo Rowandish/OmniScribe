@@ -8,7 +8,7 @@ using RestSharp;
 
 namespace OmniScribe.Services;
 
-public class AiAnalysisService
+public class AiAnalysisService : IAiAnalysisService
 {
     /// <summary>
     /// Sends transcription text to an LLM for analysis (verbale, tasks, summary).
@@ -91,7 +91,7 @@ public class AiAnalysisService
         }
     }
 
-    private decimal EstimateCost(string model, long promptTokens, long completionTokens)
+    internal decimal EstimateCost(string model, long promptTokens, long completionTokens)
     {
         // Approximate pricing per 1M tokens (USD)
         var (inputRate, outputRate) = model switch
@@ -106,7 +106,7 @@ public class AiAnalysisService
         return (promptTokens * inputRate / 1_000_000m) + (completionTokens * outputRate / 1_000_000m);
     }
 
-    private string GetChatEndpoint(AppSettings settings)
+    internal string GetChatEndpoint(AppSettings settings)
     {
         if (!string.IsNullOrWhiteSpace(settings.CustomEndpoint))
         {

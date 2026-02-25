@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
@@ -13,16 +13,17 @@ namespace OmniScribe.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly AudioService _audioService = new();
-    private readonly TranscriptionService _transcriptionService = new();
-    private readonly AiAnalysisService _aiAnalysisService = new();
+    private readonly IAudioService _audioService;
+    private readonly ITranscriptionService _transcriptionService;
+    private readonly IAiAnalysisService _aiAnalysisService;
+    private readonly INotificationService _notificationService;
     private CancellationTokenSource? _cts;
 
     // Child ViewModels
-    public RecorderViewModel Recorder { get; } = new();
-    public SettingsViewModel Settings { get; } = new();
-    public HistoryViewModel History { get; } = new();
-    public ObservableCollection<NotificationItem> Notifications => NotificationService.Instance.Notifications;
+    public RecorderViewModel Recorder { get; }
+    public SettingsViewModel Settings { get; }
+    public HistoryViewModel History { get; }
+    public ObservableCollection<NotificationItem> Notifications => _notificationService.Notifications;
 
     // Status bar
     [ObservableProperty]
@@ -55,7 +56,27 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool _showResult;
 
     public MainWindowViewModel()
+        : this(new AudioService(), new TranscriptionService(), new AiAnalysisService(),
+               NotificationService.Instance, SettingsService.Instance)
     {
+    }
+
+    public MainWindowViewModel(
+        IAudioService audioService,
+        ITranscriptionService transcriptionService,
+        IAiAnalysisService aiAnalysisService,
+        INotificationService notificationService,
+        ISettingsService settingsService)
+    {
+        _audioService = audioService;
+        _transcriptionService = transcriptionService;
+        _aiAnalysisService = aiAnalysisService;
+        _notificationService = notificationService;
+
+        Recorder = new RecorderViewModel(audioService, notificationService);
+        Settings = new SettingsViewModel(settingsService, notificationService);
+        History = new HistoryViewModel(settingsService, notificationService);
+
         Recorder.AudioReady += OnAudioReady;
         History.SessionSelected += OnSessionSelected;
     }
@@ -86,7 +107,7 @@ public partial class MainWindowViewModel : ViewModelBase
         StatusText = "Operazione annullata.";
         IsProcessing = false;
         ProgressValue = 0;
-        NotificationService.Instance.Warning("Elaborazione annullata dall'utente.");
+        _notificationService.Warning("Elaborazione annullata dall'utente.");
     }
 
     [RelayCommand]
@@ -94,7 +115,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (string.IsNullOrEmpty(Settings.ApiKey))
         {
-            NotificationService.Instance.Warning("Configura la tua API Key nelle impostazioni.");
+            _notificationService.Warning("Configura la tua API Key nelle impostazioni.");
             IsSettingsOpen = true;
             return;
         }
@@ -131,7 +152,7 @@ public partial class MainWindowViewModel : ViewModelBase
             var chunks = await _audioService.AutoChunkAsync(processedPath, ct: ct);
 
             if (chunks.Count > 1)
-                NotificationService.Instance.Info($"Audio diviso in {chunks.Count} segmenti per il caricamento.");
+                _notificationService.Info($"Audio diviso in {chunks.Count} segmenti per il caricamento.");
 
             // Step 3: Transcription
             IsProgressIndeterminate = false;
@@ -179,7 +200,7 @@ public partial class MainWindowViewModel : ViewModelBase
             History.AddSession(session);
 
             StatusText = $"Completato — {totalTokens:N0} token (~${cost:F4})";
-            NotificationService.Instance.Success("Analisi completata con successo!");
+            _notificationService.Success("Analisi completata con successo!");
         }
         catch (OperationCanceledException)
         {
@@ -188,12 +209,12 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (TimeoutException ex)
         {
             StatusText = "Timeout della richiesta.";
-            NotificationService.Instance.Error(ex.Message);
+            _notificationService.Error(ex.Message);
         }
         catch (Exception ex)
         {
             StatusText = "Errore durante l'elaborazione.";
-            NotificationService.Instance.Error($"Errore: {ex.Message}");
+            _notificationService.Error($"Errore: {ex.Message}");
         }
         finally
         {
@@ -209,8 +230,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (!string.IsNullOrEmpty(ResultMarkdown))
         {
-            // Copy to clipboard will be handled in the view via TopLevel.Clipboard
-            NotificationService.Instance.Info("Risultato copiato negli appunti.");
+            _notificationService.Info("Risultato copiato negli appunti.");
         }
     }
 
@@ -226,11 +246,11 @@ public partial class MainWindowViewModel : ViewModelBase
             var fileName = $"OmniScribe_{DateTime.Now:yyyyMMdd_HHmmss}.md";
             var fullPath = Path.Combine(desktopPath, fileName);
             await File.WriteAllTextAsync(fullPath, ResultMarkdown);
-            NotificationService.Instance.Success($"Esportato in: {fileName}");
+            _notificationService.Success($"Esportato in: {fileName}");
         }
         catch (Exception ex)
         {
-            NotificationService.Instance.Error($"Errore esportazione: {ex.Message}");
+            _notificationService.Error($"Errore esportazione: {ex.Message}");
         }
     }
 }

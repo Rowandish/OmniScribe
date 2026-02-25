@@ -8,6 +8,9 @@ namespace OmniScribe.ViewModels;
 
 public partial class SettingsViewModel : ViewModelBase
 {
+    private readonly ISettingsService _settingsService;
+    private readonly INotificationService _notificationService;
+
     [ObservableProperty]
     private string _provider = "OpenAI";
 
@@ -40,13 +43,20 @@ public partial class SettingsViewModel : ViewModelBase
     public List<string> AnalysisModels { get; } = new() { "gpt-4o-mini", "gpt-4o", "llama-3.3-70b-versatile", "llama-3.1-8b-instant" };
 
     public SettingsViewModel()
+        : this(SettingsService.Instance, NotificationService.Instance)
     {
+    }
+
+    public SettingsViewModel(ISettingsService settingsService, INotificationService notificationService)
+    {
+        _settingsService = settingsService;
+        _notificationService = notificationService;
         LoadFromSettings();
     }
 
     private void LoadFromSettings()
     {
-        var s = SettingsService.Instance.LoadSettings();
+        var s = _settingsService.LoadSettings();
         Provider = s.Provider;
         ApiKey = s.ApiKey;
         CustomEndpoint = s.CustomEndpoint;
@@ -61,20 +71,9 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void Save()
     {
-        var s = new AppSettings
-        {
-            Provider = Provider,
-            ApiKey = ApiKey,
-            CustomEndpoint = CustomEndpoint,
-            TranscriptionModel = TranscriptionModel,
-            AnalysisModel = AnalysisModel,
-            SystemPrompt = SystemPrompt,
-            Glossary = Glossary,
-            TotalTokensUsed = TotalTokensUsed,
-            EstimatedCost = EstimatedCost
-        };
-        SettingsService.Instance.SaveSettings(s);
-        NotificationService.Instance.Success("Impostazioni salvate.");
+        var s = ToAppSettings();
+        _settingsService.SaveSettings(s);
+        _notificationService.Success("Impostazioni salvate.");
     }
 
     public AppSettings ToAppSettings()
@@ -100,6 +99,6 @@ public partial class SettingsViewModel : ViewModelBase
 
         // Persist updated counters
         var s = ToAppSettings();
-        SettingsService.Instance.SaveSettings(s);
+        _settingsService.SaveSettings(s);
     }
 }

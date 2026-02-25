@@ -11,7 +11,7 @@ using RestSharp;
 
 namespace OmniScribe.Services;
 
-public class TranscriptionService
+public class TranscriptionService : ITranscriptionService
 {
     /// <summary>
     /// Transcribes audio file(s) via Whisper-compatible API.
@@ -102,7 +102,7 @@ public class TranscriptionService
         }
     }
 
-    private string GetTranscriptionEndpoint(AppSettings settings)
+    internal string GetTranscriptionEndpoint(AppSettings settings)
     {
         if (!string.IsNullOrWhiteSpace(settings.CustomEndpoint))
         {

@@ -8,7 +8,7 @@ using NAudio.Wave;
 
 namespace OmniScribe.Services;
 
-public class AudioService
+public class AudioService : IAudioService
 {
     private WaveInEvent? _waveIn;
     private WaveFileWriter? _writer;

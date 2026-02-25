@@ -8,7 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="OmniScribe.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="OmniScribe.Tests\**" />
+    <EmbeddedResource Remove="OmniScribe.Tests\**" />
+    <None Remove="OmniScribe.Tests\**" />
   </ItemGroup>
 
   <ItemGroup>

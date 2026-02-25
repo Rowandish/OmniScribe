@@ -5,7 +5,7 @@ using OmniScribe.Models;
 
 namespace OmniScribe.Services;
 
-public class NotificationService
+public class NotificationService : INotificationService
 {
     private static readonly Lazy<NotificationService> _instance = new(() => new NotificationService());
     public static NotificationService Instance => _instance.Value;

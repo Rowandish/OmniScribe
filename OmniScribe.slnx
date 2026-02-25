@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="OmniScribe.csproj" />
+  <Project Path="OmniScribe.Tests/OmniScribe.Tests.csproj" />
+</Solution>
