@@ -2082,11 +2082,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PaoloGuglielmini\\.gemini\\antigravity\\scratch\\OmniScribe\\OmniScribe.csproj",
+      "projectUniqueName": "C:\\Repository\\Mie\\.NET\\OmniScribe\\OmniScribe.csproj",
       "projectName": "OmniScribe",
-      "projectPath": "C:\\Users\\PaoloGuglielmini\\.gemini\\antigravity\\scratch\\OmniScribe\\OmniScribe.csproj",
+      "projectPath": "C:\\Repository\\Mie\\.NET\\OmniScribe\\OmniScribe.csproj",
       "packagesPath": "C:\\Users\\PaoloGuglielmini\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PaoloGuglielmini\\.gemini\\antigravity\\scratch\\OmniScribe\\obj\\",
+      "outputPath": "C:\\Repository\\Mie\\.NET\\OmniScribe\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\PaoloGuglielmini\\AppData\\Roaming\\NuGet\\NuGet.Config"

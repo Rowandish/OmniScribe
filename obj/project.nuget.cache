@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0OUoTdRCieY=",
+  "dgSpecHash": "8vHZpWxMV6M=",
   "success": true,
-  "projectFilePath": "C:\\Users\\PaoloGuglielmini\\.gemini\\antigravity\\scratch\\OmniScribe\\OmniScribe.csproj",
+  "projectFilePath": "C:\\Repository\\Mie\\.NET\\OmniScribe\\OmniScribe.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PaoloGuglielmini\\.nuget\\packages\\avalonia\\11.3.12\\avalonia.11.3.12.nupkg.sha512",
     "C:\\Users\\PaoloGuglielmini\\.nuget\\packages\\avalonia.angle.windows.natives\\2.1.25547.20250602\\avalonia.angle.windows.natives.2.1.25547.20250602.nupkg.sha512",
